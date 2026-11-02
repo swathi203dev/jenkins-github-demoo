@@ -2,22 +2,31 @@ pipeline {
     agent any
 
     stages {
-        stage('Welcome') {
-            steps {
-                echo 'Hello Swathi!'
-                echo 'Learning Jenkinsfile.'
-            }
-        }
-
         stage('Build') {
             steps {
-                echo 'Application building successfully.'
+                echo 'Building application'
+                sh 'python3 --version'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Application testing successfully.'
+                echo 'Running automated tests'
+                sh 'pytest -v'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                echo 'Creating build artifact'
+                sh 'echo "Application packaged successfully" > build-info.txt'
+                archiveArtifacts artifacts: 'build-info.txt', fingerprint: true
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deployment stage completed'
             }
         }
     }
